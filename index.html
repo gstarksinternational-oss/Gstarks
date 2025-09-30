@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G-Starks International
-</title>
+  <title>G-Starks International</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome for Social Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -183,6 +182,34 @@
       </div>
     </div>
   </footer>
+
+  <!-- Disable Right-Click + Inspect + View Source -->
+  <script>
+    // Disable right-click
+    document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+      alert("Right-click is disabled!");
+    });
+
+    // Disable common inspect/view source shortcuts
+    document.addEventListener("keydown", function(e) {
+      // F12
+      if (e.keyCode == 123) {
+        e.preventDefault();
+        alert("Inspect is disabled!");
+      }
+      // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+U
+      if (e.ctrlKey && (e.key.toLowerCase() === "u" || e.key.toLowerCase() === "i" || e.key.toLowerCase() === "j")) {
+        e.preventDefault();
+        alert("This action is disabled!");
+      }
+      // Ctrl+Shift+C (Inspect element)
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "c") {
+        e.preventDefault();
+        alert("Inspect is disabled!");
+      }
+    });
+  </script>
 
 </body>
 </html>
