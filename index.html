@@ -5,6 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Standard Login — G-Starks</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Disable right click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable common inspect shortcuts
+    document.onkeydown = function(e) {
+      if (e.keyCode == 123) { // F12
+        return false;
+      }
+      if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) {
+        return false;
+      }
+      if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+        return false;
+      }
+    }
+  </script>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-6 text-gray-100">
   <div class="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-8">
