@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Standard Login — G-Starks</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-6 text-gray-100">
+  <div class="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-8">
+    <h1 class="text-2xl font-semibold mb-6 text-center text-indigo-400">Sign in</h1>
+
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+        <input id="username" name="username" type="text" required
+               class="mt-1 block w-full rounded-md border-gray-600 bg-gray-900 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2" placeholder="Enter username" />
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+        <input id="password" name="password" type="password" required
+               class="mt-1 block w-full rounded-md border-gray-600 bg-gray-900 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2" placeholder="Enter password" />
+      </div>
+
+      <div class="flex items-center justify-between">
+        <label class="inline-flex items-center gap-2 text-sm text-gray-400">
+          <input id="showPass" type="checkbox" class="h-4 w-4" />
+          <span>Show password</span>
+        </label>
+      </div>
+
+      <div>
+        <button type="submit" class="w-full py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700">Login</button>
+      </div>
+
+      <p id="message" class="text-center text-sm mt-2 text-red-400"></p>
+    </form>
+  </div>
+
+  <script>
+    // Hardcoded credentials (client-side demo only)
+    const credentials = {
+      "nishanahammad": "nishu2008",
+      "sharbeen": "123",
+      "mishal": "123"
+    };
+
+    const form = document.getElementById('loginForm');
+    const messageEl = document.getElementById('message');
+    const showPass = document.getElementById('showPass');
+    const passwordInput = document.getElementById('password');
+
+    showPass.addEventListener('change', () => {
+      passwordInput.type = showPass.checked ? 'text' : 'password';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      messageEl.textContent = '';
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        messageEl.textContent = 'Please enter username and password.';
+        return;
+      }
+
+      if (!(username in credentials)) {
+        messageEl.textContent = 'Unknown username.';
+        return;
+      }
+
+      if (credentials[username] !== password) {
+        messageEl.textContent = 'Incorrect password.';
+        return;
+      }
+
+      // Success — redirect to admin.html
+      window.location.href = "admin.html";
+    });
+  </script>
+</body>
+</html>
