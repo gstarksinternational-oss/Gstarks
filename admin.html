@@ -1,103 +1,196 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> G-Starks.Login</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Disable right click
-    document.addEventListener('contextmenu', event => event.preventDefault());
-
-    // Disable common inspect shortcuts
-    document.onkeydown = function(e) {
-      if (e.keyCode == 123) { // F12
-        return false;
-      }
-      if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) {
-        return false;
-      }
-      if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-        return false;
-      }
-    }
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G-Music — Player</title>
+<link rel="icon" type="image/png" href="G-Music.png">
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-6 text-gray-100">
-  <div class="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-8">
-    <h1 class="text-2xl font-semibold mb-6 text-center text-indigo-400">Sign in</h1>
+<body class="bg-gray-900 text-white font-sans">
 
-    <form id="loginForm" class="space-y-4">
-      <div>
-        <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
-        <input id="username" name="username" type="text" required
-               class="mt-1 block w-full rounded-md border-gray-600 bg-gray-900 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2" placeholder="Enter username" />
-      </div>
-
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
-        <input id="password" name="password" type="password" required
-               class="mt-1 block w-full rounded-md border-gray-600 bg-gray-900 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2" placeholder="Enter password" />
-      </div>
-
-      <div class="flex items-center justify-between">
-        <label class="inline-flex items-center gap-2 text-sm text-gray-400">
-          <input id="showPass" type="checkbox" class="h-4 w-4" />
-          <span>Show password</span>
-        </label>
-      </div>
-
-      <div>
-        <button type="submit" class="w-full py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700">Login</button>
-      </div>
-
-      <p id="message" class="text-center text-sm mt-2 text-red-400"></p>
-    </form>
+<!-- Header -->
+<header class="flex items-center justify-between p-4 bg-gray-800 shadow-md">
+  <div class="flex items-center space-x-3">
+    <img src="G-Music.png" alt="G-Music Logo" class="w-10 h-10">
+    <h1 class="text-2xl font-bold italic text-green-400">G-Music</h1>
   </div>
+  <div class="flex items-center space-x-2">
+    <input type="text" id="search" placeholder="Search songs..."
+      class="bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring focus:ring-green-400">
+    <button id="openAdmin" class="bg-green-600 px-3 py-2 rounded hover:bg-green-500">Admin</button>
+  </div>
+</header>
 
-  <script>
-    // Hardcoded credentials (client-side demo only)
-    const credentials = {
-      "nishanahammad": "nishu2008",
-      "sharbeen": "123",
-      "mishal": "123"
-    };
+<!-- Song List -->
+<main class="p-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="songList"></main>
 
-    const form = document.getElementById('loginForm');
-    const messageEl = document.getElementById('message');
-    const showPass = document.getElementById('showPass');
-    const passwordInput = document.getElementById('password');
+<!-- Music Player -->
+<footer class="fixed bottom-0 left-0 w-full bg-gray-800 text-white p-4 flex flex-col md:flex-row items-center justify-between shadow-lg gap-4">
+  <div class="flex items-center space-x-3">
+    <img id="cover" src="G-Music.png" class="w-12 h-12 rounded-md">
+    <div>
+      <h2 id="title" class="text-lg font-semibold">Select a song</h2>
+      <p id="artist" class="text-sm text-gray-400">G-Music</p>
+    </div>
+  </div>
+  <audio id="audio" controls class="w-full md:w-1/2"></audio>
+  <div id="spotifyEmbed" class="w-full md:w-1/2 flex justify-center"></div>
+</footer>
 
-    showPass.addEventListener('change', () => {
-      passwordInput.type = showPass.checked ? 'text' : 'password';
+<!-- Admin Panel Modal -->
+<div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-70 hidden justify-center items-center">
+  <div class="bg-gray-800 p-6 rounded-lg w-96">
+    <h2 class="text-xl font-bold mb-4 text-green-400">Admin Panel</h2>
+
+    <!-- Add Local Song -->
+    <div class="mb-4">
+      <label class="block mb-1">Song Title:</label>
+      <input type="text" id="songName" class="w-full p-2 rounded text-black">
+      <label class="block mb-1 mt-2">Artist:</label>
+      <input type="text" id="songArtist" class="w-full p-2 rounded text-black">
+      <label class="block mb-1 mt-2">Song File (MP3):</label>
+      <input type="file" id="songFile" accept="audio/*" class="w-full">
+      <button id="addSong" class="mt-2 bg-green-600 px-4 py-2 rounded hover:bg-green-500 w-full">Add Local Song</button>
+    </div>
+
+    <hr class="my-4 border-green-600">
+
+    <!-- Add Spotify Track -->
+    <div class="mb-4">
+      <label class="block mb-1">Spotify Track URL:</label>
+      <input type="text" id="spotifyUrl" class="w-full p-2 rounded text-black" placeholder="https://open.spotify.com/track/...">
+      <button id="addSpotify" class="mt-2 bg-green-600 px-4 py-2 rounded hover:bg-green-500 w-full">Add Spotify Track</button>
+    </div>
+
+    <button id="closeAdmin" class="mt-4 bg-red-600 px-4 py-2 rounded hover:bg-red-500 w-full">Close Admin</button>
+  </div>
+</div>
+
+<script>
+const audio = document.getElementById("audio");
+const cover = document.getElementById("cover");
+const title = document.getElementById("title");
+const artist = document.getElementById("artist");
+const songList = document.getElementById("songList");
+const search = document.getElementById("search");
+const spotifyEmbed = document.getElementById("spotifyEmbed");
+
+const adminPanel = document.getElementById("adminPanel");
+const openAdminBtn = document.getElementById("openAdmin");
+const closeAdminBtn = document.getElementById("closeAdmin");
+
+// Load songs from localStorage or default
+let songs = JSON.parse(localStorage.getItem("gmusic_songs")) || [
+  { type: "local", title: "Skyline Dreams", artist: "Nishu Beats", src: "song1.mp3" },
+  { type: "local", title: "Cyber Pulse", artist: "G-Starks", src: "song2.mp3" },
+  { type: "spotify", title: "Blinding Lights", artist: "The Weeknd", url: "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b", cover: "" }
+];
+
+// Render songs
+function renderSongs(filter = "") {
+  songList.innerHTML = "";
+  songs
+    .filter(s => s.title.toLowerCase().includes(filter.toLowerCase()))
+    .forEach((song, index) => {
+      const card = document.createElement("div");
+      card.className = "bg-gray-800 p-4 rounded-lg hover:bg-gray-700 cursor-pointer transition";
+      card.innerHTML = `
+        <img src="${song.cover || "G-Music.png"}" class="rounded-md mb-3">
+        <h3 class="text-xl font-semibold">${song.title}</h3>
+        <p class="text-sm text-gray-400">${song.artist || "Unknown Artist"}</p>
+      `;
+      card.onclick = () => playSong(index);
+      songList.appendChild(card);
+    });
+}
+
+function playSong(index) {
+  const song = songs[index];
+  title.textContent = song.title;
+  artist.textContent = song.artist || "Unknown Artist";
+  cover.src = song.cover || "G-Music.png";
+
+  if (song.type === "local") {
+    audio.src = song.src;
+    audio.style.display = "block";
+    audio.play();
+    spotifyEmbed.innerHTML = "";
+  } else if (song.type === "spotify") {
+    audio.pause();
+    audio.style.display = "none";
+    const trackId = song.url.split("/track/")[1]?.split("?")[0];
+    spotifyEmbed.innerHTML = `<iframe src="https://open.spotify.com/embed/track/${trackId}" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`;
+  }
+}
+
+// Search songs
+search.addEventListener("input", e => renderSongs(e.target.value));
+renderSongs();
+
+// Admin panel toggle
+openAdminBtn.addEventListener("click", () => adminPanel.classList.remove("hidden"));
+closeAdminBtn.addEventListener("click", () => adminPanel.classList.add("hidden"));
+
+// Add local song
+document.getElementById("addSong").addEventListener("click", () => {
+  const titleInput = document.getElementById("songName").value.trim();
+  const artistInput = document.getElementById("songArtist").value.trim();
+  const file = document.getElementById("songFile").files[0];
+  if (!titleInput || !file) return alert("Enter title and select a file.");
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    songs.push({ type: "local", title: titleInput, artist: artistInput || "Unknown Artist", src: e.target.result });
+    localStorage.setItem("gmusic_songs", JSON.stringify(songs));
+    renderSongs();
+    document.getElementById("songName").value = "";
+    document.getElementById("songArtist").value = "";
+    document.getElementById("songFile").value = "";
+  };
+  reader.readAsDataURL(file);
+});
+
+// Add Spotify track with auto-fetch title/cover
+document.getElementById("addSpotify").addEventListener("click", async () => {
+  const url = document.getElementById("spotifyUrl").value.trim();
+  if (!url || !url.includes("spotify.com/track/")) return alert("Invalid Spotify URL.");
+
+  try {
+    const oEmbedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`;
+    const response = await fetch(oEmbedUrl);
+    const data = await response.json();
+    const [trackTitle, trackArtist] = data.title.split(" – ");
+
+    songs.push({
+      type: "spotify",
+      title: trackTitle || "Spotify Track",
+      artist: trackArtist || "Unknown Artist",
+      cover: data.thumbnail_url,
+      url
     });
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      messageEl.textContent = '';
+    localStorage.setItem("gmusic_songs", JSON.stringify(songs));
+    renderSongs();
+    document.getElementById("spotifyUrl").value = "";
+  } catch (err) {
+    console.error(err);
+    alert("Failed to fetch Spotify data.");
+  }
+});
 
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value;
+// Disable right-click
+document.addEventListener("contextmenu", e => e.preventDefault());
 
-      if (!username || !password) {
-        messageEl.textContent = 'Please enter username and password.';
-        return;
-      }
+// Disable certain key combinations
+document.addEventListener("keydown", e => {
+  // F12
+  if (e.key === "F12") e.preventDefault();
+  // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+U / Ctrl+Shift+C
+  if ((e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) || (e.ctrlKey && e.key === "U")) e.preventDefault();
+});
+</script>
 
-      if (!(username in credentials)) {
-        messageEl.textContent = 'Unknown username.';
-        return;
-      }
-
-      if (credentials[username] !== password) {
-        messageEl.textContent = 'Incorrect password.';
-        return;
-      }
-
-      // Success — redirect to admin.html
-      window.location.href = "admin.html";
-    });
-  </script>
 </body>
 </html>
 
