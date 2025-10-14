@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G-Music Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1f1f1f, #111111);
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #4f46e5;
+      box-shadow: 0 0 5px #4f46e5;
+    }
+  </style>
+  <script>
+    // Disable right-click and view source
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if(e.ctrlKey && (e.key === 'u' || e.key === 'Shift' && e.key === 'I')) {
+        e.preventDefault();
+      }
+    });
+
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Demo users
+      const users = {
+        "admin": "admin123",
+        "user1": "music2025"
+      };
+
+      if(users[username] && users[username] === password) {
+        alert("Login successful!");
+        window.location.href = "admin.html"; // redirect after login
+      } else {
+        alert("Invalid username or password!");
+      }
+    }
+  </script>
+</head>
+<body class="flex items-center justify-center h-screen font-sans text-white">
+  <div class="bg-gray-900 p-10 rounded-2xl shadow-xl w-96">
+    <div class="text-center mb-6">
+      <img src="G-Music.png" alt="G-Music Logo" class="w-24 mx-auto mb-4">
+      <h1 class="text-2xl font-bold">G-Music Login</h1>
+    </div>
+    <div class="space-y-4">
+      <input type="text" id="username" placeholder="Username" class="input-field w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white" />
+      <input type="password" id="password" placeholder="Password" class="input-field w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white" />
+      <button onclick="login()" class="w-full bg-purple-600 hover:bg-purple-700 transition py-3 rounded-lg font-semibold">Login</button>
+    </div>
+    <p class="text-center mt-4 text-gray-400 text-sm">© 2025 G-Music. All rights reserved.</p>
+  </div>
+</body>
+</html>
+
