@@ -16,7 +16,7 @@
     }
   </style>
   <script>
-    // Disable right-click and view source
+    // Disable right-click and basic inspect/view source prevention
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
       if(e.ctrlKey && (e.key === 'u' || e.key === 'Shift' && e.key === 'I')) {
@@ -28,15 +28,13 @@
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
 
-      // Demo users
-      const users = {
-        "admin": "admin123",
-        "user1": "music2025"
-      };
+      // Single user
+      const validUser = "admin";
+      const validPass = "gadmin";
 
-      if(users[username] && users[username] === password) {
+      if(username === validUser && password === validPass) {
         alert("Login successful!");
-        window.location.href = "admin.html"; // redirect after login
+        window.location.href = "g-music.html"; // redirect to G-Music page
       } else {
         alert("Invalid username or password!");
       }
@@ -58,4 +56,3 @@
   </div>
 </body>
 </html>
-
