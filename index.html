@@ -4,11 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>G-Starks International</title>
+  
+  <!-- Tailwind CSS Setup -->
   <script>
-    tailwind = { config: { darkMode: 'class' } }
+    // Config: Explicitly setting dark mode to 'class'
+    tailwind = { config: { darkMode: 'class', theme: { extend: { colors: { 'primary': '#3b82f6' } } } } }
   </script>
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Custom Styles for Loader, Scroll Button, and Filters -->
   <style>
     /* Loader styles */
     #loader {
@@ -21,232 +28,458 @@
     #loader h1 { color: white; font-size: 2rem; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.5} }
     .fade-out { opacity: 0; transition: opacity 0.5s ease; }
-    #scrollTop { position: fixed; bottom: 20px; right: 20px; display: none; }
+    
+    /* Scroll-to-top button fixed position */
+    #scrollTop { 
+      position: fixed; bottom: 20px; right: 20px; 
+      display: none; 
+      z-index: 50;
+      /* Ensure proper touch target size */
+      width: 44px; 
+      height: 44px;
+    }
+
+    /* Filter Button Styles */
+    .category-btn {
+        background-color: transparent;
+        color: #4b5563; /* gray-600 */
+        border: 1px solid transparent;
+        transition: all 0.2s ease-in-out;
+    }
+    .category-btn:hover {
+        background-color: #dbeafe; /* blue-100 */
+        color: #1d4ed8; /* blue-700 */
+    }
+    .dark .category-btn {
+        color: #d1d5db; /* gray-300 */
+    }
+    .dark .category-btn:hover {
+        background-color: #4b5563; /* gray-600 */
+        color: white;
+    }
+    .active-filter {
+        background-color: #3b82f6 !important; /* blue-600 */
+        color: white !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    }
+    .dark .active-filter {
+        background-color: #60a5fa !important; /* blue-400 */
+        color: #1f2937 !important; /* dark text for light blue */
+    }
+    
+    /* Mobile Menu Transition Control (Max-height for smooth vertical slide) */
+    .menu-open {
+        max-height: 250px; 
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    /* Container for all content to prevent horizontal scroll on tiny screens */
+    .container {
+        width: 100%;
+        max-width: 1280px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem; /* Default padding for mobile */
+        padding-right: 1rem;
+    }
+    @media (min-width: 640px) {
+        .container {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+    }
   </style>
 </head>
+
 <body class="bg-gray-50 text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white">
 
-  <!-- Loader -->
+  <!-- Loader Screen -->
   <div id="loader">
     <div class="w-20 h-20 border-8 border-white/20 border-t-white animate-spin mb-4"></div>
     <h1>G-Starks Loading...</h1>
   </div>
 
-  <!-- Header -->
+  <!-- Header/Navigation Bar -->
   <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300">
-    <div class="container mx-auto flex justify-between items-center p-4">
+    <div class="container flex justify-between items-center py-3">
       <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">G-Starks</h1>
-      <nav>
+      
+      <!-- Desktop Navigation (Hidden on Mobile) -->
+      <nav class="hidden md:block">
         <ul class="flex gap-6 font-medium">
-          <li><a href="#" class="hover:text-blue-500">Home</a></li>
-          <li><a href="#shop" class="hover:text-blue-500">Shop</a></li>
-          <li><a href="#contact" class="hover:text-blue-500">Contact</a></li>
-           <li><a href="login.html">G-Music</a></li>
+          <li><a href="#" class="hover:text-blue-500 transition duration-150">Home</a></li>
+          <li><a href="#shop" class="hover:text-blue-500 transition duration-150">Shop</a></li>
+          <li><a href="#contact" class="hover:text-blue-500 transition duration-150">Contact</a></li>
+          <li><a href="login.html" class="hover:text-blue-500 transition duration-150">G-Music</a></li>
         </ul>
       </nav>
-      <button id="darkToggle" class="ml-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700">
-        <i id="darkIcon" class="fa-solid fa-moon text-gray-800 dark:text-yellow-400"></i>
+
+      <!-- Mobile Controls (Visible on Mobile) -->
+      <div class="flex items-center md:hidden">
+        <!-- Dark Mode Toggle for Mobile -->
+        <button id="darkToggleMobile" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 mr-2 active:scale-95 transition-transform">
+          <i id="darkIconMobile" class="fa-solid fa-moon text-gray-800 dark:text-yellow-400"></i>
+        </button>
+        <!-- Hamburger Menu Toggle -->
+        <button id="menuToggle" class="p-2 rounded-lg text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 active:scale-95 transition-transform">
+            <i class="fa-solid fa-bars text-xl" id="menuIcon"></i>
+        </button>
+      </div>
+
+      <!-- Desktop Dark Mode Toggle (Hidden on Mobile) -->
+      <button id="darkToggleDesktop" class="ml-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hidden md:block active:scale-95 transition-transform">
+        <i id="darkIconDesktop" class="fa-solid fa-moon text-gray-800 dark:text-yellow-400"></i>
       </button>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="bg-blue-100 dark:bg-gray-700 py-16 text-center transition-colors duration-300">
-    <h2 class="text-4xl font-extrabold mb-4">Exclusive OF G-Starks International</h2>
-    <p class="text-lg text-gray-700 dark:text-gray-300">Trendy, comfortable, and stylish designs only on Redbubble</p>
+  <!-- Mobile Menu Drawer -->
+  <div id="mobile-menu" class="md:hidden bg-white dark:bg-gray-800 shadow-lg absolute w-full transition-all duration-300 overflow-hidden max-h-0 z-40 border-t border-gray-200 dark:border-gray-700">
+    <ul class="flex flex-col gap-1 px-4 font-medium">
+      <li><a href="#" class="block p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg text-lg" data-close-menu>Home</a></li>
+      <li><a href="#shop" class="block p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg text-lg" data-close-menu>Shop</a></li>
+      <li><a href="#contact" class="block p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg text-lg" data-close-menu>Contact</a></li>
+      <li><a href="login.html" class="block p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg text-lg" data-close-menu>G-Music</a></li>
+    </ul>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="bg-blue-100 dark:bg-gray-700 py-12 md:py-16 text-center transition-colors duration-300">
+    <div class="container">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3">Exclusive OF G-Starks International</h2>
+        <p class="text-base sm:text-lg text-gray-700 dark:text-gray-300">Trendy, comfortable, and stylish designs only on Redbubble</p>
+    </div>
   </section>
 
-  <!-- Shop -->
-  <section id="shop" class="container mx-auto py-12">
-    <h3 class="text-3xl font-bold text-center mb-10">Our Collection</h3>
+  <!-- Shop Section -->
+  <section id="shop" class="container py-10 md:py-12">
+    <h3 class="text-3xl font-bold text-center mb-8">Our Collection</h3>
+    
+    <!-- Category Filter Buttons (Improved Mobile Layout) -->
+    <div id="categoryFilter" class="flex justify-center gap-2 md:gap-4 mb-6 md:mb-8 flex-wrap p-2 bg-gray-100 dark:bg-gray-700 rounded-xl shadow-inner max-w-4xl mx-auto">
+        <button data-filter="all" class="category-btn px-3 py-2 rounded-full text-sm font-medium transition active-filter flex-grow md:flex-grow-0">All Products</button>
+        <button data-filter="apparel" class="category-btn px-3 py-2 rounded-full text-sm font-medium transition flex-grow md:flex-grow-0">T-Shirts / Apparel</button>
+        <button data-filter="sticker" class="category-btn px-3 py-2 rounded-full text-sm font-medium transition flex-grow md:flex-grow-0">Stickers</button>
+        <button data-filter="print" class="category-btn px-3 py-2 rounded-full text-sm font-medium transition flex-grow md:flex-grow-0">Prints / Wall Art</button>
+    </div>
+    
+    <!-- Search Bar -->
     <div class="flex justify-center mb-8">
-      <input id="searchBox" type="text" placeholder="Search products..." class="w-1/2 p-2 border rounded-lg shadow-md dark:bg-gray-800 dark:text-white">
+      <input 
+        id="searchBox" 
+        type="text" 
+        placeholder="Search products..." 
+        class="w-full md:w-1/2 p-3 border-2 border-gray-300 rounded-full shadow-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:border-gray-700 transition duration-300"
+      >
     </div>
 
-    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Product Grid (Adjusted breakpoints for better mobile flow) -->
+    <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
 
-      <!-- Japanese Essential -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5748659832.0339/ssrco,essential_tee,mens_01,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Japanese Essential T-Shirt" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Japanese Essential T-Shirt</h4>
-          <p class="text-gray-600 mb-4">Minimalistic & Stylish</p>
-          <a href="https://www.redbubble.com/i/t-shirt/japanese-by-exoticshirtson/167930339.NL9AC" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 1: Japanese Essential (Apparel) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5748659832.0339/ssrco,essential_tee,mens_01,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Japanese Essential T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Japanese Essential T-Shirt</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Minimalistic & Stylish</p>
+          <a href="https://www.redbubble.com/i/t-shirt/japanese-by-exoticshirtson/167930339.NL9AC" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Hourglass -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5748713833.2013/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Hourglass Classic T-Shirt" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Hourglass Classic T-Shirt</h4>
-          <p class="text-gray-600 mb-4">For the night owls</p>
-          <a href="https://www.redbubble.com/i/t-shirt/hourglass-by-exoticshirtson/167932013.WFLAH" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 2: Hourglass (Apparel) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5748713833.2013/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Hourglass Classic T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Hourglass Classic T-Shirt</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">For the night owls</p>
+          <a href="https://www.redbubble.com/i/t-shirt/hourglass-by-exoticshirtson/167932013.WFLAH" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Drift King -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5748769940.3766/ssrco,classic_tee,womens_02,fafafa:ca443f4786,front,close_portrait,x1000.1.webp" alt="Drift King Classic T-Shirt" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Drift King Classic T-Shirt</h4>
-          <p class="text-gray-600 mb-4">Bold & Unique</p>
-          <a href="https://www.redbubble.com/i/t-shirt/drift-king-by-exoticshirtson/167933766.WFLAH" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 3: Drift King (Apparel) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5748769940.3766/ssrco,classic_tee,womens_02,fafafa:ca443f4786,front,close_portrait,x1000.1.webp" alt="Drift King Classic T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Drift King Classic T-Shirt</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Bold & Unique</p>
+          <a href="https://www.redbubble.com/i/t-shirt/drift-king-by-exoticshirtson/167933766.WFLAH" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Spirited Away -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5759432929.7448/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Spirited Away T-Shirt" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Spirited Away T-Shirt</h4>
-          <p class="text-gray-600 mb-4">Anime Inspired</p>
-          <a href="https://www.redbubble.com/i/t-shirt/spirited-away-by-exoticshirtson/168277448.WFLAH" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 4: Spirited Away (Apparel) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5759432929.7448/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Spirited Away T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Spirited Away T-Shirt</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Anime Inspired</p>
+          <a href="https://www.redbubble.com/i/t-shirt/spirited-away-by-exoticshirtson/168277448.WFLAH" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Mad Max -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5759446660.7855/ra,womens_tshirt,x1900,fafafa:ca443f4786,front-c,265,125,750,1000-bg,f8f8f8.webp" alt="Mad Max T-Shirt" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Mad Max T-Shirt</h4>
-          <p class="text-gray-600 mb-4">Post-Apocalyptic Vibes</p>
-          <a href="https://www.redbubble.com/i/t-shirt/mad-max-by-exoticshirtson/168277855.8PZ5B" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 5: Mad Max (Apparel) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5759446660.7855/ra,womens_tshirt,x1900,fafafa:ca443f4786,front-c,265,125,750,1000-bg,f8f8f8.webp" alt="Mad Max T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Mad Max T-Shirt</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Post-Apocalyptic Vibes</p>
+          <a href="https://www.redbubble.com/i/t-shirt/mad-max-by-exoticshirtson/168277855.8PZ5B" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Ford Mustang -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5764081376.7179/ssrco,essential_tee,womens_01,fafafa:ca443f4786,front,close_portrait,x1000.1.webp" alt="Ford Mustang T-Shirt" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Ford Mustang T-Shirt</h4>
-          <p class="text-gray-600 mb-4">Muscle Car Style</p>
-          <a href="https://www.redbubble.com/i/t-shirt/ford-mustang-by-exoticshirtson/168427179.NL9AC" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 6: Ford Mustang (Apparel) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5764081376.7179/ssrco,essential_tee,womens_01,fafafa:ca443f4786,front,close_portrait,x1000.1.webp" alt="Ford Mustang T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Ford Mustang T-Shirt</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Muscle Car Style</p>
+          <a href="https://www.redbubble.com/i/t-shirt/ford-mustang-by-exoticshirtson/168427179.NL9AC" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Dominance -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5848321525.5626/ssrco,boxy_tee,womens_01,ffffff:affd82b53f,front,close_portrait,x1000.webp" alt="Dominance T-Shirt" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Dominance STFU T-Shirt</h4>
-          <p class="text-gray-600 mb-4">Streetwear Attitude</p>
-          <a href="https://www.redbubble.com/i/t-shirt/Dominance-stfu-by-exoticshirtson/171115626.3KEDS" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 7: Dominance (Apparel) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5848321525.5626/ssrco,boxy_tee,womens_01,ffffff:affd82b53f,front,close_portrait,x1000.webp" alt="Dominance T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Dominance STFU T-Shirt</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Streetwear Attitude</p>
+          <a href="https://www.redbubble.com/i/t-shirt/Dominance-stfu-by-exoticshirtson/171115626.3KEDS" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Trust No One -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5846663574.5986/fpp,small,lustre,wall_texture,product,750x1000.webp" alt="Trust No One Print" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Trust No One Print</h4>
-          <p class="text-gray-600 mb-4">Wall Art</p>
-          <a href="https://www.redbubble.com/i/photographic-print/Trust-No-One-G-stark-by-exoticshirtson/171115986.6Q0TX" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 8: Trust No One (Print) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="print">
+        <img src="https://ih1.redbubble.net/image.5846663574.5986/fpp,small,lustre,wall_texture,product,750x1000.webp" alt="Trust No One Print" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Trust No One Print</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Wall Art</p>
+          <a href="https://www.redbubble.com/i/photographic-print/Trust-No-One-G-stark-by-exoticshirtson/171115986.6Q0TX" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Anime Girl Sticker -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5846670435.6240/sss,small,product,750x1000.webp" alt="Anime Girl Sticker" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Anime Girl Sticker</h4>
-          <p class="text-gray-600 mb-4">Aesthetic Stickers</p>
-          <a href="https://www.redbubble.com/i/sticker/Anime-girl-by-exoticshirtson/171116240.EJUG5" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 9: Anime Girl Sticker (Sticker) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="sticker">
+        <img src="https://ih1.redbubble.net/image.5846670435.6240/sss,small,product,750x1000.webp" alt="Anime Girl Sticker" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Anime Girl Sticker</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Aesthetic Stickers</p>
+          <a href="https://www.redbubble.com/i/sticker/Anime-girl-by-exoticshirtson/171116240.EJUG5" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Ken Sticker -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5848267588.7371/sss,small,product,750x1000.webp" alt="Ken Sticker" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Ken Sticker</h4>
-          <p class="text-gray-600 mb-4">Cool Anime Style</p>
-          <a href="https://www.redbubble.com/i/sticker/ken-by-G-stark-by-exoticshirtson/171167371.EJUG5" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 10: Ken Sticker (Sticker) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="sticker">
+        <img src="https://ih1.redbubble.net/image.5848267588.7371/sss,small,product,750x1000.webp" alt="Ken Sticker" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Ken Sticker</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Cool Anime Style</p>
+          <a href="https://www.redbubble.com/i/sticker/ken-by-G-stark-by-exoticshirtson/171167371.EJUG5" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- SLAASHH -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5848304141.8613/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="SLAASHH T-Shirt" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">SLAASHH T-Shirt</h4>
-          <p class="text-gray-600 mb-4">Edgy & Bold</p>
-          <a href="https://www.redbubble.com/i/t-shirt/SLAASHH-G-stark-by-exoticshirtson/171168613.WFLAH" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 11: SLAASHH (Apparel) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5848304141.8613/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="SLAASHH T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">SLAASHH T-Shirt</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Edgy & Bold</p>
+          <a href="https://www.redbubble.com/i/t-shirt/SLAASHH-G-stark-by-exoticshirtson/171168613.WFLAH" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Breaking Bad -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5949427043.0411/gsss,small,product,750x1000.webp" alt="Breaking Bad Sticker" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Breaking Bad – I Am The Danger</h4>
-          <p class="text-gray-600 mb-4">Legendary Quote</p>
-          <a href="https://www.redbubble.com/i/sticker/breaking-bad-i-am-the-danger-by-exoticshirtson/174430411.JCQM3" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 12: Breaking Bad (Sticker) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="sticker">
+        <img src="https://ih1.redbubble.net/image.5949427043.0411/gsss,small,product,750x1000.webp" alt="Breaking Bad Sticker" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Breaking Bad – I Am The Danger</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Legendary Quote</p>
+          <a href="https://www.redbubble.com/i/sticker/breaking-bad-i-am-the-danger-by-exoticshirtson/174430411.JCQM3" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
 
-      <!-- Heisenberg -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl overflow-hidden hover:scale-105 transition product">
-        <img src="https://ih1.redbubble.net/image.5950501661.4327/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.webp" alt="Heisenberg Sticker" class="w-full">
-        <div class="p-4">
-          <h4 class="text-xl font-semibold">Heisenberg Sticker</h4>
-          <p class="text-gray-600 mb-4">The One Who Knocks</p>
-          <a href="https://www.redbubble.com/i/sticker/Heisenberg-from-the-breaking-bad-i-am-the-one-who-knocks-by-exoticshirtson/174464327.EJUG5" target="_blank" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Get</a>
+      <!-- Product Card 13: Heisenberg (Sticker) -->
+      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="sticker">
+        <img src="https://ih1.redbubble.net/image.5950501661.4327/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.webp" alt="Heisenberg Sticker" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
+        <div class="p-3 sm:p-4 text-center">
+          <h4 class="text-base sm:text-lg font-semibold truncate">Heisenberg Sticker</h4>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">The One Who Knocks</p>
+          <a href="https://www.redbubble.com/i/sticker/Heisenberg-from-the-breaking-bad-i-am-the-one-who-knocks-by-exoticshirtson/174464327.EJUG5" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
         </div>
       </div>
+      
+      <!-- No products found message container (initially hidden) -->
+       <div id="noResults" class="hidden text-center col-span-full py-10 text-xl text-gray-500 dark:text-gray-400">
+           No products found matching your criteria.
+       </div>
 
     </div>
   </section>
 
-  <!-- Scroll to top -->
-  <button id="scrollTop" class="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700">
+  <!-- Scroll to top Button -->
+  <button id="scrollTop" class="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300">
     <i class="fa-solid fa-arrow-up"></i>
   </button>
 
-  <!-- Footer -->
+  <!-- Footer/Contact Section -->
   <footer id="contact" class="bg-gray-200 dark:bg-gray-800 py-12 text-center transition-colors duration-300">
     <h3 class="text-2xl font-bold mb-4">Contact Us</h3>
     <div class="flex justify-center gap-6 mb-4">
-      <a href="mailto:gstarksinternational@gmail.com" target="_blank"><i class="fa-solid fa-envelope text-2xl text-red-600"></i></a>
-      <a href="https://www.instagram.com/gstark.merch/#" target="_blank"><i class="fa-brands fa-instagram text-2xl text-pink-500"></i></a>
-      <a href="https://www.redbubble.com/people/exoticshirtson/shop" target="_blank"><i class="fa-brands fa-redbubble text-2xl text-red-400"></i></a>
+      <a href="mailto:gstarksinternational@gmail.com" target="_blank" title="Email Us" class="hover:scale-110 transition-transform"><i class="fa-solid fa-envelope text-3xl text-red-600 hover:text-red-700"></i></a>
+      <a href="https://www.instagram.com/gstark.merch/#" target="_blank" title="Instagram" class="hover:scale-110 transition-transform"><i class="fa-brands fa-instagram text-3xl text-pink-500 hover:text-pink-600"></i></a>
+      <a href="https://www.redbubble.com/people/exoticshirtson/shop" target="_blank" title="Redbubble Shop" class="hover:scale-110 transition-transform"><i class="fa-brands fa-redbubble text-3xl text-red-400 hover:text-red-500"></i></a>
     </div>
-    <p class="text-gray-700 dark:text-gray-300">© 2025 G-Starks International. All rights reserved.</p>
+    <p class="text-gray-700 dark:text-gray-300">© <span id="currentYear"></span> G-Starks International. All rights reserved.</p>
   </footer>
 
+  <!-- JavaScript for interactivity and product filtering -->
   <script>
-    // Loader
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+    });
+
+    // --- Global Variables and State ---
+    const htmlEl = document.documentElement;
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuToggle = document.getElementById("menuToggle");
+    const menuIcon = document.getElementById("menuIcon");
+    const darkToggleMobile = document.getElementById("darkToggleMobile");
+    const darkToggleDesktop = document.getElementById("darkToggleDesktop");
+
+    const categoryButtons = document.querySelectorAll(".category-btn");
+    const products = document.querySelectorAll(".product");
+    const searchBox = document.getElementById("searchBox");
+    const noResults = document.getElementById("noResults");
+    let activeCategory = "all"; 
+
+    // --- Mobile Menu Logic ---
+    const toggleMobileMenu = () => {
+        const isOpen = mobileMenu.classList.toggle("menu-open");
+        
+        // Toggle the hamburger icon to an 'X'
+        if (isOpen) {
+            menuIcon.classList.replace("fa-bars", "fa-xmark");
+        } else {
+            menuIcon.classList.replace("fa-xmark", "fa-bars");
+        }
+    };
+
+    menuToggle.addEventListener("click", toggleMobileMenu);
+
+    // Close menu when a link is clicked
+    document.querySelectorAll("[data-close-menu]").forEach(link => {
+        link.addEventListener("click", () => {
+            if (mobileMenu.classList.contains("menu-open")) {
+                toggleMobileMenu();
+            }
+        });
+    });
+
+    // --- Dark Mode Logic ---
+    const updateDarkIcons = (isDark) => {
+        const moonClass = 'fa-moon';
+        const sunClass = 'fa-sun';
+        
+        // Update both desktop and mobile icons
+        [document.getElementById("darkIconDesktop"), document.getElementById("darkIconMobile")].forEach(icon => {
+            if (icon) {
+                if (isDark) {
+                    icon.classList.replace(moonClass, sunClass);
+                    icon.classList.add('text-yellow-400');
+                    icon.classList.remove('text-gray-800');
+                } else {
+                    icon.classList.replace(sunClass, moonClass);
+                    icon.classList.add('text-gray-800');
+                    icon.classList.remove('text-yellow-400');
+                }
+            }
+        });
+    };
+
+    const toggleTheme = () => {
+        htmlEl.classList.toggle("dark");
+        const isDark = htmlEl.classList.contains("dark");
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateDarkIcons(isDark);
+    };
+
+    // Initial theme check
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    
+    if (initialDark) {
+        htmlEl.classList.add('dark');
+    }
+    updateDarkIcons(initialDark); // Initialize icons
+
+    // Event listeners for both toggles
+    darkToggleMobile.addEventListener("click", toggleTheme);
+    darkToggleDesktop.addEventListener("click", toggleTheme);
+
+
+    // --- Combined Filter and Search Logic ---
+    const filterAndSearch = () => {
+        const query = searchBox.value.toLowerCase().trim();
+        let foundCount = 0;
+        
+        products.forEach(product => {
+            const category = product.getAttribute('data-category');
+            const name = product.querySelector("h4").textContent.toLowerCase();
+            const description = product.querySelector("p").textContent.toLowerCase();
+
+            // 1. Category Filter Check
+            const categoryMatch = activeCategory === "all" || category === activeCategory;
+
+            // 2. Search Filter Check
+            const searchMatch = name.includes(query) || description.includes(query);
+
+            // Show product only if both checks pass
+            if (categoryMatch && searchMatch) {
+                product.style.display = "block";
+                foundCount++;
+            } else {
+                product.style.display = "none";
+            }
+        });
+
+        // Toggle "No results" message
+        noResults.classList.toggle("hidden", foundCount > 0);
+    }
+
+    // Event Listeners for category buttons
+    categoryButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            categoryButtons.forEach(btn => btn.classList.remove("active-filter"));
+            button.classList.add("active-filter");
+
+            activeCategory = button.getAttribute('data-filter');
+            searchBox.value = ""; 
+
+            filterAndSearch();
+        });
+    });
+
+    // Event Listener for search box
+    searchBox.addEventListener("input", filterAndSearch);
+    
+    // Run filter once on load
+    filterAndSearch();
+    
+    // --- Scroll to Top Button Logic ---
+    const scrollTopBtn = document.getElementById("scrollTop");
+    window.addEventListener("scroll", () => {
+      // Use window.innerHeight to calculate scroll position for better compatibility
+      scrollTopBtn.style.display = window.scrollY > window.innerHeight / 2 ? "block" : "none";
+    });
+    scrollTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // --- Loader Logic ---
     window.addEventListener("load", () => {
       setTimeout(() => {
         const loader = document.getElementById("loader");
         loader.classList.add("fade-out");
         setTimeout(() => loader.style.display = "none", 500);
-      }, 3000);
-    });
-
-    // Dark mode toggle
-    const darkToggle = document.getElementById("darkToggle");
-    const darkIcon = document.getElementById("darkIcon");
-    darkToggle.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-    });
-
-    // Scroll to top
-    const scrollTopBtn = document.getElementById("scrollTop");
-    window.addEventListener("scroll", () => {
-      scrollTopBtn.style.display = window.scrollY > 200 ? "block" : "none";
-    });
-    scrollTopBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-    // Search filter
-    const searchBox = document.getElementById("searchBox");
-    const products = document.querySelectorAll(".product");
-    searchBox.addEventListener("input", () => {
-      const query = searchBox.value.toLowerCase();
-      products.forEach(product => {
-        const name = product.querySelector("h4").textContent.toLowerCase();
-        product.style.display = name.includes(query) ? "block" : "none";
-      });
+      }, 3000); 
     });
   </script>
 
