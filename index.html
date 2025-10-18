@@ -3,84 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G-Starks International</title>
-  
-  <!-- Tailwind CSS Setup -->
-  <script>
-    // Config: Explicitly setting dark mode to 'class'
-    tailwind = { config: { darkMode: 'class', theme: { extend: { colors: { 'primary': '#3b82f6' } } } } }
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>G-Starks International | World Class Merch</title>
   
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
-  <!-- Custom Styles for Loader, Scroll Button, and Filters -->
+  <!-- FULL CUSTOM CSS STYLES -->
   <style>
-    /* Loader styles */
-    #loader {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      display: flex; justify-content: center; align-items: center; flex-direction: column;
-      z-index: 9999;
-      background: linear-gradient(to bottom right, #3b82f6, #60a5fa, #374151);
-    }
-    #loader .animate-spin { border-top-color: white; border-radius: 50%; }
-    #loader h1 { color: white; font-size: 2rem; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.5} }
-    .fade-out { opacity: 0; transition: opacity 0.5s ease; }
-    
-    /* Scroll-to-top button fixed position */
-    #scrollTop { 
-      position: fixed; bottom: 20px; right: 20px; 
-      display: none; 
-      z-index: 50;
-      /* Ensure proper touch target size */
-      width: 44px; 
-      height: 44px;
-    }
-
-    /* Filter Button Styles */
-    .category-btn {
-        background-color: transparent;
-        color: #4b5563; /* gray-600 */
-        border: 1px solid transparent;
-        transition: all 0.2s ease-in-out;
-    }
-    .category-btn:hover {
-        background-color: #dbeafe; /* blue-100 */
-        color: #1d4ed8; /* blue-700 */
-    }
-    .dark .category-btn {
-        color: #d1d5db; /* gray-300 */
-    }
-    .dark .category-btn:hover {
-        background-color: #4b5563; /* gray-600 */
-        color: white;
-    }
-    .active-filter {
-        background-color: #3b82f6 !important; /* blue-600 */
-        color: white !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
-    }
-    .dark .active-filter {
-        background-color: #60a5fa !important; /* blue-400 */
-        color: #1f2937 !important; /* dark text for light blue */
-    }
-    
-    /* Mobile Menu Transition Control (Max-height for smooth vertical slide) */
-    .menu-open {
-        max-height: 250px; 
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
+    /* Aesthetic Enhancement: Variables and Global Styles */
+    :root {
+      /* Light Mode Variables (Clean & Bright) */
+      --color-background: #fcfcfc;
+      --color-text: #0f172a; 
+      --color-header-bg: #ffffff;
+      --color-footer-bg: #e5e7eb;
+      --color-primary-600: #0070f3; /* World-class blue */
+      --color-primary-400: #60a5fa;
+      --color-secondary-bg: #f0f8ff; /* Very light background for hero/accents */
+      --color-card-bg: #ffffff;
+      --color-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.05); /* Soft, modern shadow */
+      --color-border: #e2e8f0; /* Light border/separator */
+      --color-gray-text: #64748b; /* Slate-500 */
+      --color-gray-700: #334155;
+      --color-filter-bg: #f8fafc; 
+      --color-button-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --border-radius-main: 1rem; /* 16px soft rounding */
+      --border-radius-button: 9999px;
     }
 
-    /* Container for all content to prevent horizontal scroll on tiny screens */
+    /* Dark Mode Variables (Deep & High Contrast) */
+    .dark {
+      --color-background: #0d1117; /* GitHub Dark background */
+      --color-text: #f1f5f9; 
+      --color-header-bg: #161b22; 
+      --color-footer-bg: #161b22;
+      --color-primary-600: #3b82f6; /* Brighter blue for contrast */
+      --color-primary-400: #93c5fd;
+      --color-secondary-bg: #1e293b; /* Slate-800 */
+      --color-card-bg: #161b22;
+      --color-card-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+      --color-border: #334155; 
+      --color-gray-text: #94a3b8; 
+      --color-gray-700: #f1f5f9;
+      --color-filter-bg: #161b22;
+      --color-button-shadow: none;
+    }
+    
+    /* Global Base Styles */
+    body {
+      margin: 0;
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      background-color: var(--color-background);
+      color: var(--color-text);
+      transition: background-color 0.4s ease, color 0.4s ease;
+      line-height: 1.6; 
+      text-rendering: optimizeLegibility;
+      min-height: 100vh;
+    }
+
+    /* Container for layout centering and padding */
     .container {
         width: 100%;
         max-width: 1280px;
         margin-left: auto;
         margin-right: auto;
-        padding-left: 1rem; /* Default padding for mobile */
+        padding-left: 1rem; 
         padding-right: 1rem;
     }
     @media (min-width: 640px) {
@@ -89,226 +76,639 @@
             padding-right: 1.5rem;
         }
     }
+
+    /* --- Loader Styles --- */
+    #loader {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      display: flex; justify-content: center; align-items: center; flex-direction: column;
+      z-index: 9999;
+      background: linear-gradient(135deg, #1e40ff, #0070f3, #60a5fa);
+    }
+    #loader .animate-spin { 
+      width: 5rem; height: 5rem; 
+      border: 8px solid rgba(255, 255, 255, 0.2); 
+      border-top-color: white; 
+      border-radius: 50%; 
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+    #loader h1 { color: white; font-size: 2rem; animation: pulse 1.5s infinite; font-weight: 800; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.5} }
+    .fade-out { opacity: 0; transition: opacity 0.5s ease; }
+    
+    /* --- Header Styles --- */
+    header {
+      background-color: var(--color-header-bg);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      position: sticky; top: 0; z-index: 50;
+      transition: background-color 0.3s ease;
+      border-bottom: 1px solid var(--color-border);
+    }
+    header .container {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 0.75rem; padding-bottom: 0.75rem;
+    }
+    header h1 {
+      font-size: 1.75rem; font-weight: 800;
+      color: var(--color-primary-600);
+      letter-spacing: -0.05em;
+    }
+    
+    /* Desktop Nav */
+    nav { display: none; }
+    @media (min-width: 768px) {
+      nav { display: block; }
+      nav ul { display: flex; gap: 1.5rem; font-weight: 600; list-style: none; padding: 0; margin: 0; }
+      /* FIX 1: Remove underline from desktop links */
+      nav a { color: var(--color-text); transition: color 0.15s; text-decoration: none; }
+      nav a:hover { color: var(--color-primary-600); }
+      .dark nav a:hover { color: var(--color-primary-400); }
+    }
+
+    /* Mobile Controls/Toggles */
+    .mobile-controls { display: flex; align-items: center; }
+    @media (min-width: 768px) { .mobile-controls { display: none; } }
+    
+    /* Combined styling for action buttons (Dark Mode, Contact) */
+    .header-action-btn {
+        padding: 0.6rem; 
+        border-radius: var(--border-radius-button);
+        transition: background-color 0.3s ease, transform 0.1s ease;
+        border: none; 
+        cursor: pointer;
+        margin-left: 0.5rem;
+        background-color: var(--color-filter-bg);
+        box-shadow: var(--color-button-shadow);
+        display: flex; 
+        justify-content: center;
+        align-items: center;
+        text-decoration: none; 
+    }
+    
+    .header-action-btn i {
+        color: var(--color-gray-700); 
+        transition: color 0.3s ease;
+        font-size: 1.125rem;
+    }
+
+    /* FIX 2: Ensure button contrast in dark mode */
+    .dark .header-action-btn {
+        /* Use a slightly darker background than the icon color in dark mode */
+        background-color: #334155; 
+        box-shadow: none;
+    }
+    .dark .header-action-btn i {
+        color: var(--color-text); /* This ensures the icon is light */
+    }
+    
+    .header-action-btn:active { transform: scale(0.95); }
+    .header-action-btn:hover { background-color: var(--color-secondary-bg); }
+    .dark .header-action-btn:hover { background-color: var(--color-secondary-bg); }
+    
+    /* Desktop Controls Wrapper */
+    .desktop-controls-wrapper {
+        display: none;
+        align-items: center;
+    }
+    @media (min-width: 768px) {
+        .desktop-controls-wrapper {
+            display: flex;
+        }
+    }
+    
+    /* Adjust spacing for desktop buttons */
+    #contactButtonDesktop {
+        margin-left: 1.5rem; 
+        margin-right: 0.5rem; 
+    }
+    
+    /* Mobile Menu Drawer */
+    #mobile-menu {
+      display: none; 
+      background-color: var(--color-card-bg);
+      box-shadow: 0 8px 10px -3px rgba(0, 0, 0, 0.15);
+      position: absolute; width: 100%;
+      transition: all 0.3s ease;
+      overflow: hidden; max-height: 0;
+      z-index: 40;
+      border-bottom: 1px solid var(--color-border);
+    }
+    @media (max-width: 767px) { #mobile-menu { display: block; } }
+    .menu-open { max-height: 250px; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    
+    /* Mobile Navigation List Style Removal (Bullet points) */
+    .mobile-nav-list {
+        list-style: none; /* Removes bullet points */
+        padding: 0;
+        margin: 0;
+    }
+
+    #mobile-menu a {
+      display: block; padding: 0.75rem; border-radius: 0.5rem;
+      font-size: 1.125rem; font-weight: 500;
+      color: var(--color-text); text-decoration: none; /* No underline */
+    }
+    #mobile-menu a:hover { background-color: var(--color-secondary-bg); }
+    .dark #mobile-menu a:hover { background-color: var(--color-gray-700); }
+
+    /* --- Hero Section --- (Impactful design) */
+    #hero-section {
+      background-color: var(--color-secondary-bg);
+      /* ENHANCEMENT: Subtle radial gradient for clean depth */
+      background-image: radial-gradient(circle at 50% 10%, rgba(0, 112, 243, 0.05) 0%, rgba(240, 248, 255, 0) 70%);
+      padding-top: 4rem; padding-bottom: 4rem;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+    .dark #hero-section {
+        background-image: radial-gradient(circle at 50% 10%, rgba(59, 130, 246, 0.1) 0%, rgba(30, 41, 59, 0) 70%);
+    }
+    @media (min-width: 768px) { #hero-section { padding-top: 6rem; padding-bottom: 6rem; } }
+    
+    #hero-section h2 {
+      font-size: 2.5rem; font-weight: 900; 
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.05em;
+      line-height: 1.1;
+    }
+    @media (min-width: 640px) { #hero-section h2 { font-size: 3rem; } }
+    @media (min-width: 768px) { #hero-section h2 { font-size: 4.5rem; } } /* Slightly larger title */
+    
+    #hero-section p {
+      font-size: 1.25rem; /* Larger subtext */
+      color: var(--color-gray-700);
+      font-weight: 400;
+      max-width: 600px;
+      margin: 0.5rem auto 0;
+    }
+    .dark #hero-section p { color: var(--color-gray-text); }
+
+    /* --- Shop Section --- */
+    #shop {
+      padding-top: 3rem; padding-bottom: 5rem;
+    }
+    #shop h3 {
+      font-size: 2.25rem; font-weight: 800;
+      text-align: center; margin-bottom: 2.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* Filter Styles */
+    #categoryFilter {
+      display: flex; justify-content: center;
+      gap: 0.5rem; 
+      margin-bottom: 2rem; 
+      flex-wrap: wrap; 
+      padding: 0.75rem;
+      background-color: var(--color-filter-bg); 
+      border-radius: var(--border-radius-main);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+      max-width: 64rem;
+      margin-left: auto; margin-right: auto;
+      border: 1px solid var(--color-border);
+    }
+    .category-btn {
+        padding: 0.6rem 1.1rem;
+        border-radius: var(--border-radius-button);
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.2s cubic-bezier(0.25, 0.8, 0.5, 1);
+        flex-grow: 1; 
+        border: none;
+        color: var(--color-gray-text);
+        cursor: pointer;
+        background-color: transparent;
+    }
+    @media (min-width: 768px) {
+        .category-btn {
+            flex-grow: 0;
+            padding: 0.6rem 1.5rem;
+        }
+    }
+
+    .category-btn:hover {
+        background-color: var(--color-secondary-bg);
+        color: var(--color-text);
+        transform: translateY(-2px);
+    }
+    .category-btn:active {
+        transform: translateY(0);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+    .dark .category-btn:hover {
+        background-color: var(--color-secondary-bg);
+        color: var(--color-text);
+    }
+
+    .active-filter {
+        background-color: var(--color-primary-600) !important; 
+        color: white !important;
+        box-shadow: 0 6px 15px -3px rgba(0, 112, 243, 0.3) !important; 
+        transform: none !important;
+        border: 1px solid var(--color-primary-600);
+    }
+    .dark .active-filter {
+        box-shadow: 0 6px 15px -3px rgba(59, 130, 246, 0.2) !important;
+    }
+    
+    /* Search Bar */
+    #searchBox {
+      width: 100%;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius-button);
+      box-shadow: var(--color-card-shadow); 
+      transition: all 0.3s ease;
+      background-color: var(--color-card-bg);
+      color: var(--color-text);
+      font-size: 1rem;
+    }
+    #searchBox:focus {
+        outline: none;
+        border-color: var(--color-primary-600);
+        box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.3); 
+    }
+    .dark #searchBox {
+        background-color: var(--color-header-bg);
+        border-color: var(--color-border);
+    }
+    @media (min-width: 768px) {
+        #searchBox { width: 50%; }
+    }
+
+    /* Product Grid */
+    #productGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr)); 
+      gap: 1.5rem; 
+    }
+    @media (min-width: 640px) {
+        #productGrid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)); 
+            gap: 2rem;
+        }
+    }
+    @media (min-width: 1024px) {
+        #productGrid {
+            grid-template-columns: repeat(4, minmax(0, 1fr)); 
+            gap: 2rem;
+        }
+    }
+
+    /* Product Cards - Enhanced hover/shadow */
+    .product {
+      background-color: var(--color-card-bg);
+      box-shadow: var(--color-card-shadow); 
+      border-radius: var(--border-radius-main); 
+      overflow: hidden;
+      /* ENHANCEMENT: Initial border is subtle, transition is smooth */
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease; 
+      border: 1px solid var(--color-border);
+    }
+    .product:hover {
+      transform: scale(1.03); /* Slightly reduced lift for elegance */
+      box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.2); /* Deep, clean shadow */
+      /* ENHANCEMENT: Primary color border on hover */
+      border-color: var(--color-primary-600); 
+      z-index: 10;
+    }
+    .dark .product:hover {
+        box-shadow: 0 15px 30px -8px rgba(59, 130, 246, 0.15);
+        border-color: var(--color-primary-600);
+    }
+    
+    .product img {
+      width: 100%; height: auto; object-fit: cover;
+      transition: opacity 0.3s;
+    }
+    .product:hover img { opacity: 0.95; }
+    
+    .product div {
+      padding: 1.25rem 1rem; 
+      text-align: center;
+    }
+    .product h4 {
+      font-size: 1.125rem; font-weight: 700; 
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+      margin-bottom: 0.25rem;
+    }
+    .product p {
+      font-size: 0.9rem; 
+      color: var(--color-gray-text);
+      margin-bottom: 1rem;
+    }
+
+    /* Action button on card */
+    .product a {
+      display: block; width: 100%; text-align: center;
+      background-color: var(--color-primary-600);
+      color: white; padding: 0.75rem 0.75rem;
+      font-size: 0.9rem; border-radius: var(--border-radius-button);
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 4px 10px -2px rgba(0, 112, 243, 0.4);
+      font-weight: 700;
+    }
+    .product a:hover {
+      background-color: #005bb5; 
+      box-shadow: 0 6px 12px -2px rgba(0, 112, 243, 0.6);
+    }
+    .product a:active {
+        transform: scale(0.98);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* No Results Message */
+    #noResults {
+        text-align: center;
+        grid-column: 1 / -1; 
+        padding-top: 3rem; padding-bottom: 3rem;
+        font-size: 1.5rem;
+        color: var(--color-gray-text); 
+    }
+    .hidden { display: none !important; }
+
+    /* --- Scroll to Top Button --- */
+    #scrollTop { 
+      position: fixed; bottom: 20px; right: 20px; 
+      display: none; 
+      z-index: 50;
+      width: 50px; height: 50px;
+      background-color: var(--color-primary-600);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-button);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-size: 1.25rem;
+    }
+    #scrollTop:hover {
+        background-color: #005bb5; 
+        transform: translateY(-4px); 
+    }
+    #scrollTop:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* --- Footer Styles --- */
+    footer {
+      background-color: var(--color-footer-bg);
+      padding-top: 3rem; padding-bottom: 3rem;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      margin-top: 3rem;
+    }
+    footer h3 {
+      font-size: 1.8rem; font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    footer div {
+      display: flex; justify-content: center; gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    footer p {
+      color: var(--color-gray-text);
+      font-size: 0.875rem;
+    }
+    footer a {
+        transition: transform 0.3s ease;
+        display: inline-block;
+    }
+    footer a:hover {
+        transform: scale(1.3);
+    }
   </style>
 </head>
 
-<body class="bg-gray-50 text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white">
+<body>
 
   <!-- Loader Screen -->
   <div id="loader">
-    <div class="w-20 h-20 border-8 border-white/20 border-t-white animate-spin mb-4"></div>
+    <div class="animate-spin"></div>
     <h1>G-Starks Loading...</h1>
   </div>
 
   <!-- Header/Navigation Bar -->
-  <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300">
-    <div class="container flex justify-between items-center py-3">
-      <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">G-Starks</h1>
+  <header>
+    <div class="container">
+      <h1 id="siteTitle">G-Starks</h1>
       
       <!-- Desktop Navigation (Hidden on Mobile) -->
-      <nav class="hidden md:block">
-        <ul class="flex gap-6 font-medium">
-          <li><a href="#" class="hover:text-blue-500 transition duration-150">Home</a></li>
-          <li><a href="#shop" class="hover:text-blue-500 transition duration-150">Shop</a></li>
-          <li><a href="#contact" class="hover:text-blue-500 transition duration-150">Contact</a></li>
-          <li><a href="login.html" class="hover:text-blue-500 transition duration-150">G-Music</a></li>
+      <nav class="desktop-nav">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#shop">Shop</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="login.html">G-Music</a></li>
         </ul>
       </nav>
 
       <!-- Mobile Controls (Visible on Mobile) -->
-      <div class="flex items-center md:hidden">
+      <div class="mobile-controls">
+        <!-- NEW: Contact Button for Mobile -->
+        <a href="#contact" id="contactButtonMobile" class="header-action-btn" aria-label="Contact Us">
+            <i class="fa-solid fa-envelope"></i>
+        </a>
         <!-- Dark Mode Toggle for Mobile -->
-        <button id="darkToggleMobile" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 mr-2 active:scale-95 transition-transform">
-          <i id="darkIconMobile" class="fa-solid fa-moon text-gray-800 dark:text-yellow-400"></i>
+        <button id="darkToggleMobile" class="dark-toggle header-action-btn" aria-label="Toggle dark mode">
+          <i id="darkIconMobile" class="fa-solid fa-moon"></i>
         </button>
         <!-- Hamburger Menu Toggle -->
-        <button id="menuToggle" class="p-2 rounded-lg text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 active:scale-95 transition-transform">
+        <button id="menuToggle" aria-label="Open menu">
             <i class="fa-solid fa-bars text-xl" id="menuIcon"></i>
         </button>
       </div>
 
-      <!-- Desktop Dark Mode Toggle (Hidden on Mobile) -->
-      <button id="darkToggleDesktop" class="ml-6 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hidden md:block active:scale-95 transition-transform">
-        <i id="darkIconDesktop" class="fa-solid fa-moon text-gray-800 dark:text-yellow-400"></i>
-      </button>
+      <!-- NEW: Desktop Action Controls Wrapper -->
+      <div id="desktopControlsWrapper" class="desktop-controls-wrapper">
+        <!-- NEW: Contact Button for Desktop -->
+        <a href="#contact" id="contactButtonDesktop" class="header-action-btn" aria-label="Contact Us">
+            <i class="fa-solid fa-envelope"></i>
+        </a>
+        <!-- Desktop Dark Mode Toggle -->
+        <button id="darkToggleDesktop" class="dark-toggle header-action-btn" aria-label="Toggle dark mode">
+          <i id="darkIconDesktop" class="fa-solid fa-moon"></i>
+        </button>
+      </div>
     </div>
   </header>
 
   <!-- Mobile Menu Drawer -->
-  <div id="mobile-menu" class="md:hidden bg-white dark:bg-gray-800 shadow-lg absolute w-full transition-all duration-300 overflow-hidden max-h-0 z-40 border-t border-gray-200 dark:border-gray-700">
-    <ul class="flex flex-col gap-1 px-4 font-medium">
-      <li><a href="#" class="block p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg text-lg" data-close-menu>Home</a></li>
-      <li><a href="#shop" class="block p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg text-lg" data-close-menu>Shop</a></li>
-      <li><a href="#contact" class="block p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg text-lg" data-close-menu>Contact</a></li>
-      <li><a href="login.html" class="block p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg text-lg" data-close-menu>G-Music</a></li>
+  <div id="mobile-menu">
+    <ul class="mobile-nav-list">
+      <li><a href="#" data-close-menu>Home</a></li>
+      <li><a href="#shop" data-close-menu>Shop</a></li>
+      <li><a href="#contact" data-close-menu>Contact</a></li>
+      <li><a href="login.html" data-close-menu>G-Music</a></li>
     </ul>
   </div>
 
   <!-- Hero Section -->
-  <section class="bg-blue-100 dark:bg-gray-700 py-12 md:py-16 text-center transition-colors duration-300">
+  <section id="hero-section">
     <div class="container">
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3">Exclusive OF G-Starks International</h2>
-        <p class="text-base sm:text-lg text-gray-700 dark:text-gray-300">Trendy, comfortable, and stylish designs only on Redbubble</p>
+        <h2>Exclusive OF G-Starks International</h2>
+        <p>Trendy, comfortable, and stylish designs only on Redbubble</p>
     </div>
   </section>
 
   <!-- Shop Section -->
-  <section id="shop" class="container py-10 md:py-12">
-    <h3 class="text-3xl font-bold text-center mb-8">Our Collection</h3>
+  <section id="shop" class="container">
+    <h3>Our Collection</h3>
     
-    <!-- Category Filter Buttons (Improved Mobile Layout) -->
-    <div id="categoryFilter" class="flex justify-center gap-2 md:gap-4 mb-6 md:mb-8 flex-wrap p-2 bg-gray-100 dark:bg-gray-700 rounded-xl shadow-inner max-w-4xl mx-auto">
-        <button data-filter="all" class="category-btn px-3 py-2 rounded-full text-sm font-medium transition active-filter flex-grow md:flex-grow-0">All Products</button>
-        <button data-filter="apparel" class="category-btn px-3 py-2 rounded-full text-sm font-medium transition flex-grow md:flex-grow-0">T-Shirts / Apparel</button>
-        <button data-filter="sticker" class="category-btn px-3 py-2 rounded-full text-sm font-medium transition flex-grow md:flex-grow-0">Stickers</button>
-        <button data-filter="print" class="category-btn px-3 py-2 rounded-full text-sm font-medium transition flex-grow md:flex-grow-0">Prints / Wall Art</button>
+    <!-- Category Filter Buttons -->
+    <div id="categoryFilter">
+        <button data-filter="all" class="category-btn active-filter">All Products</button>
+        <button data-filter="apparel" class="category-btn">T-Shirts / Apparel</button>
+        <button data-filter="sticker" class="category-btn">Stickers</button>
+        <button data-filter="print" class="category-btn">Prints / Wall Art</button>
     </div>
     
     <!-- Search Bar -->
-    <div class="flex justify-center mb-8">
+    <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
       <input 
         id="searchBox" 
         type="text" 
         placeholder="Search products..." 
-        class="w-full md:w-1/2 p-3 border-2 border-gray-300 rounded-full shadow-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:border-gray-700 transition duration-300"
       >
     </div>
 
-    <!-- Product Grid (Adjusted breakpoints for better mobile flow) -->
-    <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+    <!-- Product Grid -->
+    <div id="productGrid">
 
       <!-- Product Card 1: Japanese Essential (Apparel) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
-        <img src="https://ih1.redbubble.net/image.5748659832.0339/ssrco,essential_tee,mens_01,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Japanese Essential T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Japanese Essential T-Shirt</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Minimalistic & Stylish</p>
-          <a href="https://www.redbubble.com/i/t-shirt/japanese-by-exoticshirtson/167930339.NL9AC" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5748659832.0339/ssrco,essential_tee,mens_01,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Japanese Essential T-Shirt">
+        <div>
+          <h4>Japanese Essential T-Shirt</h4>
+          <p>Minimalistic & Stylish</p>
+          <a href="https://www.redbubble.com/i/t-shirt/japanese-by-exoticshirtson/167930339.NL9AC" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 2: Hourglass (Apparel) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
-        <img src="https://ih1.redbubble.net/image.5748713833.2013/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Hourglass Classic T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Hourglass Classic T-Shirt</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">For the night owls</p>
-          <a href="https://www.redbubble.com/i/t-shirt/hourglass-by-exoticshirtson/167932013.WFLAH" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5748713833.2013/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Hourglass Classic T-Shirt">
+        <div>
+          <h4>Hourglass Classic T-Shirt</h4>
+          <p>For the night owls</p>
+          <a href="https://www.redbubble.com/i/t-shirt/hourglass-by-exoticshirtson/167932013.WFLAH" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 3: Drift King (Apparel) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
-        <img src="https://ih1.redbubble.net/image.5748769940.3766/ssrco,classic_tee,womens_02,fafafa:ca443f4786,front,close_portrait,x1000.1.webp" alt="Drift King Classic T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Drift King Classic T-Shirt</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Bold & Unique</p>
-          <a href="https://www.redbubble.com/i/t-shirt/drift-king-by-exoticshirtson/167933766.WFLAH" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5748769940.3766/ssrco,classic_tee,womens_02,fafafa:ca443f4786,front,close_portrait,x1000.1.webp" alt="Drift King Classic T-Shirt">
+        <div>
+          <h4>Drift King Classic T-Shirt</h4>
+          <p>Bold & Unique</p>
+          <a href="https://www.redbubble.com/i/t-shirt/drift-king-by-exoticshirtson/167933766.WFLAH" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 4: Spirited Away (Apparel) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
-        <img src="https://ih1.redbubble.net/image.5759432929.7448/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Spirited Away T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Spirited Away T-Shirt</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Anime Inspired</p>
-          <a href="https://www.redbubble.com/i/t-shirt/spirited-away-by-exoticshirtson/168277448.WFLAH" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5759432929.7448/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="Spirited Away T-Shirt">
+        <div>
+          <h4>Spirited Away T-Shirt</h4>
+          <p>Anime Inspired</p>
+          <a href="https://www.redbubble.com/i/t-shirt/spirited-away-by-exoticshirtson/168277448.WFLAH" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 5: Mad Max (Apparel) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
-        <img src="https://ih1.redbubble.net/image.5759446660.7855/ra,womens_tshirt,x1900,fafafa:ca443f4786,front-c,265,125,750,1000-bg,f8f8f8.webp" alt="Mad Max T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Mad Max T-Shirt</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Post-Apocalyptic Vibes</p>
-          <a href="https://www.redbubble.com/i/t-shirt/mad-max-by-exoticshirtson/168277855.8PZ5B" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5759446660.7855/ra,womens_tshirt,x1900,fafafa:ca443f4786,front-c,265,125,750,1000-bg,f8f8f8.webp" alt="Mad Max T-Shirt">
+        <div>
+          <h4>Mad Max T-Shirt</h4>
+          <p>Post-Apocalyptic Vibes</p>
+          <a href="https://www.redbubble.com/i/t-shirt/mad-max-by-exoticshirtson/168277855.8PZ5B" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 6: Ford Mustang (Apparel) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
-        <img src="https://ih1.redbubble.net/image.5764081376.7179/ssrco,essential_tee,womens_01,fafafa:ca443f4786,front,close_portrait,x1000.1.webp" alt="Ford Mustang T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Ford Mustang T-Shirt</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Muscle Car Style</p>
-          <a href="https://www.redbubble.com/i/t-shirt/ford-mustang-by-exoticshirtson/168427179.NL9AC" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5764081376.7179/ssrco,essential_tee,womens_01,fafafa:ca443f4786,front,close_portrait,x1000.1.webp" alt="Ford Mustang T-Shirt">
+        <div>
+          <h4>Ford Mustang T-Shirt</h4>
+          <p>Muscle Car Style</p>
+          <a href="https://www.redbubble.com/i/t-shirt/ford-mustang-by-exoticshirtson/168427179.NL9AC" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 7: Dominance (Apparel) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
-        <img src="https://ih1.redbubble.net/image.5848321525.5626/ssrco,boxy_tee,womens_01,ffffff:affd82b53f,front,close_portrait,x1000.webp" alt="Dominance T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Dominance STFU T-Shirt</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Streetwear Attitude</p>
-          <a href="https://www.redbubble.com/i/t-shirt/Dominance-stfu-by-exoticshirtson/171115626.3KEDS" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5848321525.5626/ssrco,boxy_tee,womens_01,ffffff:affd82b53f,front,close_portrait,x1000.webp" alt="Dominance T-Shirt">
+        <div>
+          <h4>Dominance STFU T-Shirt</h4>
+          <p>Streetwear Attitude</p>
+          <a href="https://www.redbubble.com/i/t-shirt/Dominance-stfu-by-exoticshirtson/171115626.3KEDS" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 8: Trust No One (Print) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="print">
-        <img src="https://ih1.redbubble.net/image.5846663574.5986/fpp,small,lustre,wall_texture,product,750x1000.webp" alt="Trust No One Print" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Trust No One Print</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Wall Art</p>
-          <a href="https://www.redbubble.com/i/photographic-print/Trust-No-One-G-stark-by-exoticshirtson/171115986.6Q0TX" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="print">
+        <img src="https://ih1.redbubble.net/image.5846663574.5986/fpp,small,lustre,wall_texture,product,750x1000.webp" alt="Trust No One Print">
+        <div>
+          <h4>Trust No One Print</h4>
+          <p>Wall Art</p>
+          <a href="https://www.redbubble.com/i/photographic-print/Trust-No-One-G-stark-by-exoticshirtson/171115986.6Q0TX" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 9: Anime Girl Sticker (Sticker) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="sticker">
-        <img src="https://ih1.redbubble.net/image.5846670435.6240/sss,small,product,750x1000.webp" alt="Anime Girl Sticker" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Anime Girl Sticker</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Aesthetic Stickers</p>
-          <a href="https://www.redbubble.com/i/sticker/Anime-girl-by-exoticshirtson/171116240.EJUG5" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="sticker">
+        <img src="https://ih1.redbubble.net/image.5846670435.6240/sss,small,product,750x1000.webp" alt="Anime Girl Sticker">
+        <div>
+          <h4>Anime Girl Sticker</h4>
+          <p>Aesthetic Stickers</p>
+          <a href="https://www.redbubble.com/i/sticker/Anime-girl-by-exoticshirtson/171116240.EJUG5" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 10: Ken Sticker (Sticker) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="sticker">
-        <img src="https://ih1.redbubble.net/image.5848267588.7371/sss,small,product,750x1000.webp" alt="Ken Sticker" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Ken Sticker</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Cool Anime Style</p>
-          <a href="https://www.redbubble.com/i/sticker/ken-by-G-stark-by-exoticshirtson/171167371.EJUG5" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="sticker">
+        <img src="https://ih1.redbubble.net/image.5848267588.7371/sss,small,product,750x1000.webp" alt="Ken Sticker">
+        <div>
+          <h4>Ken Sticker</h4>
+          <p>Cool Anime Style</p>
+          <a href="https://www.redbubble.com/i/sticker/ken-by-G-stark-by-exoticshirtson/171167371.EJUG5" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 11: SLAASHH (Apparel) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="apparel">
-        <img src="https://ih1.redbubble.net/image.5848304141.8613/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="SLAASHH T-Shirt" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">SLAASHH T-Shirt</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Edgy & Bold</p>
-          <a href="https://www.redbubble.com/i/t-shirt/SLAASHH-G-stark-by-exoticshirtson/171168613.WFLAH" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="apparel">
+        <img src="https://ih1.redbubble.net/image.5848304141.8613/ssrco,classic_tee,mens_02,fafafa:ca443f4786,front,close_portrait,x1000.webp" alt="SLAASHH T-Shirt">
+        <div>
+          <h4>SLAASHH T-Shirt</h4>
+          <p>Edgy & Bold</p>
+          <a href="https://www.redbubble.com/i/t-shirt/SLAASHH-G-stark-by-exoticshirtson/171168613.WFLAH" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 12: Breaking Bad (Sticker) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="sticker">
-        <img src="https://ih1.redbubble.net/image.5949427043.0411/gsss,small,product,750x1000.webp" alt="Breaking Bad Sticker" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Breaking Bad – I Am The Danger</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">Legendary Quote</p>
-          <a href="https://www.redbubble.com/i/sticker/breaking-bad-i-am-the-danger-by-exoticshirtson/174430411.JCQM3" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="sticker">
+        <img src="https://ih1.redbubble.net/image.5949427043.0411/gsss,small,product,750x1000.webp" alt="Breaking Bad Sticker">
+        <div>
+          <h4>Breaking Bad – I Am The Danger</h4>
+          <p>Legendary Quote</p>
+          <a href="https://www.redbubble.com/i/sticker/breaking-bad-i-am-the-danger-by-exoticshirtson/174430411.JCQM3" target="_blank">Get Now</a>
         </div>
       </div>
 
       <!-- Product Card 13: Heisenberg (Sticker) -->
-      <div class="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden hover:scale-[1.02] transition product group" data-category="sticker">
-        <img src="https://ih1.redbubble.net/image.5950501661.4327/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.webp" alt="Heisenberg Sticker" class="w-full h-auto object-cover group-hover:opacity-90 transition duration-300">
-        <div class="p-3 sm:p-4 text-center">
-          <h4 class="text-base sm:text-lg font-semibold truncate">Heisenberg Sticker</h4>
-          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">The One Who Knocks</p>
-          <a href="https://www.redbubble.com/i/sticker/Heisenberg-from-the-breaking-bad-i-am-the-one-who-knocks-by-exoticshirtson/174464327.EJUG5" target="_blank" class="block w-full text-center bg-blue-600 text-white px-3 py-2 text-sm rounded-full hover:bg-blue-700 transition duration-300 active:scale-98">Get Now</a>
+      <div class="product" data-category="sticker">
+        <img src="https://ih1.redbubble.net/image.5950501661.4327/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.webp" alt="Heisenberg Sticker">
+        <div>
+          <h4>Heisenberg Sticker</h4>
+          <p>The One Who Knocks</p>
+          <a href="https://www.redbubble.com/i/sticker/Heisenberg-from-the-breaking-bad-i-am-the-one-who-knocks-by-exoticshirtson/174464327.EJUG5" target="_blank">Get Now</a>
         </div>
       </div>
       
       <!-- No products found message container (initially hidden) -->
-       <div id="noResults" class="hidden text-center col-span-full py-10 text-xl text-gray-500 dark:text-gray-400">
+       <div id="noResults" class="hidden">
            No products found matching your criteria.
        </div>
 
@@ -316,23 +716,65 @@
   </section>
 
   <!-- Scroll to top Button -->
-  <button id="scrollTop" class="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300">
+  <button id="scrollTop">
     <i class="fa-solid fa-arrow-up"></i>
   </button>
 
   <!-- Footer/Contact Section -->
-  <footer id="contact" class="bg-gray-200 dark:bg-gray-800 py-12 text-center transition-colors duration-300">
-    <h3 class="text-2xl font-bold mb-4">Contact Us</h3>
-    <div class="flex justify-center gap-6 mb-4">
-      <a href="mailto:gstarksinternational@gmail.com" target="_blank" title="Email Us" class="hover:scale-110 transition-transform"><i class="fa-solid fa-envelope text-3xl text-red-600 hover:text-red-700"></i></a>
-      <a href="https://www.instagram.com/gstark.merch/#" target="_blank" title="Instagram" class="hover:scale-110 transition-transform"><i class="fa-brands fa-instagram text-3xl text-pink-500 hover:text-pink-600"></i></a>
-      <a href="https://www.redbubble.com/people/exoticshirtson/shop" target="_blank" title="Redbubble Shop" class="hover:scale-110 transition-transform"><i class="fa-brands fa-redbubble text-3xl text-red-400 hover:text-red-500"></i></a>
+  <footer id="contact">
+    <h3>Contact Us</h3>
+    <div>
+      <a href="mailto:gstarksinternational@gmail.com" target="_blank" title="Email Us"><i class="fa-solid fa-envelope text-3xl" style="color:#dc2626;"></i></a>
+      <a href="https://www.instagram.com/gstark.merch/#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram text-3xl" style="color:#ec4899;"></i></a>
+      <a href="https://www.redbubble.com/people/exoticshirtson/shop" target="_blank" title="Redbubble Shop"><i class="fa-brands fa-redbubble text-3xl" style="color:#f87171;"></i></a>
     </div>
-    <p class="text-gray-700 dark:text-gray-300">© <span id="currentYear"></span> G-Starks International. All rights reserved.</p>
+    <p>© <span id="currentYear"></span> G-Starks International. All rights reserved.</p>
   </footer>
 
   <!-- JavaScript for interactivity and product filtering -->
   <script>
+    // --- Security Measures (Client-Side Protection) ---
+    const addSecurityMeasures = () => {
+        // 1. Disable Right-Click (Context Menu)
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            console.warn("Attempted right-click blocked for content protection.");
+        });
+
+        // 2. Disable Keyboard Shortcuts for Dev Tools and View Source
+        document.addEventListener('keydown', (e) => {
+            // F12 key (Windows/Linux Dev Tools)
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return;
+            }
+            
+            const isCtrlOrCmd = e.ctrlKey || e.metaKey; 
+            const isShift = e.shiftKey;
+
+            // Ctrl/Cmd + Shift + I (Toggle DevTools)
+            if (isCtrlOrCmd && isShift && e.keyCode === 73) {
+                e.preventDefault();
+                return;
+            }
+
+            // Ctrl/Cmd + Shift + J (Console)
+            if (isCtrlOrCmd && isShift && e.keyCode === 74) {
+                e.preventDefault();
+                return;
+            }
+            
+            // Ctrl/Cmd + U (View Source)
+            if (isCtrlOrCmd && e.keyCode === 85) {
+                e.preventDefault();
+                return;
+            }
+        });
+    };
+
+    // Call security measures immediately (before DOMContentLoaded) to capture global key events early
+    addSecurityMeasures(); 
+
     document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("currentYear").textContent = new Date().getFullYear();
     });
@@ -382,14 +824,11 @@
         // Update both desktop and mobile icons
         [document.getElementById("darkIconDesktop"), document.getElementById("darkIconMobile")].forEach(icon => {
             if (icon) {
+                // Toggling classes to manage the icon visual state
                 if (isDark) {
                     icon.classList.replace(moonClass, sunClass);
-                    icon.classList.add('text-yellow-400');
-                    icon.classList.remove('text-gray-800');
                 } else {
                     icon.classList.replace(sunClass, moonClass);
-                    icon.classList.add('text-gray-800');
-                    icon.classList.remove('text-yellow-400');
                 }
             }
         });
